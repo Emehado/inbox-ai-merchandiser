@@ -31,9 +31,12 @@ export const fakeApi = {
   },
 
   // Exceptions endpoints
-  async getExceptions(): Promise<Exception[]> {
+  async getExceptions(status?: string): Promise<Exception[]> {
     await delay();
-    return mockExceptions;
+    if (!status || status === 'all') {
+      return mockExceptions;
+    }
+    return mockExceptions.filter(item => item.status === status);
   },
 
   async getExceptionById(id: string): Promise<Exception | null> {

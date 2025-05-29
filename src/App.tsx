@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +16,7 @@ import LabDipDetail from "./pages/LabDipDetail";
 import PipelineInsight from "./pages/PipelineInsight";
 import NotFound from "./pages/NotFound";
 import ChaseUps from "./pages/ChaseUps";
+import Exceptions from "./pages/Exceptions";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,7 @@ const App = () => (
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/trace" element={<TraceTrace />} />
                 <Route path="/chaseups" element={<ChaseUps />} />
+                <Route path="/exceptions" element={<Exceptions />} />
                 <Route path="/exception/:id" element={<ExceptionDetail />} />
                 <Route path="/labdip/:id" element={<LabDipDetail />} />
                 <Route path="/pipeline-insight" element={<PipelineInsight />} />

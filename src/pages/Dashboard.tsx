@@ -54,8 +54,8 @@ const Dashboard = () => {
             <div className="text-2xl font-bold text-red-600 mb-4">
               {dashboardData?.urgentExceptions?.length || 0}
             </div>
-            <div className="space-y-3">
-              {dashboardData?.urgentExceptions?.map((exception) => (
+            <div className="space-y-3 mb-4">
+              {dashboardData?.urgentExceptions?.slice(0, 2).map((exception) => (
                 <Link key={exception.id} to={`/exception/${exception.id}`} className="block">
                   <div className="p-3 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer">
                     <div className="flex justify-between items-start">
@@ -73,7 +73,17 @@ const Dashboard = () => {
                   </div>
                 </Link>
               ))}
+              {(dashboardData?.urgentExceptions?.length || 0) > 2 && (
+                <div className="text-xs text-gray-500 text-center py-1">
+                  +{(dashboardData?.urgentExceptions?.length || 0) - 2} more exceptions
+                </div>
+              )}
             </div>
+            <Link to="/exceptions">
+              <Button variant="outline" size="sm" className="w-full">
+                View All Exceptions
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
