@@ -6,46 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, FileText, Calendar, Building2, Filter } from "lucide-react";
+import { Search, Calendar } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { fakeApi } from "../services/fakeApi";
 
 const KnowledgeSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
-  const searchResults = [
-    {
-      id: 1,
-      question: "Latest carton spec for 24-SS-214",
-      answer: "Latest carton spec for 24-SS-214: 56 × 40 × 32 cm, 12 pcs/carton, 19.2 kg.",
-      sources: [
-        { file: "Cost_214.xlsx", location: "cell D12", type: "Excel" },
-        { file: "PO_214.pdf", location: "page 2", type: "PDF" }
-      ],
-      timestamp: "2024-01-15",
-      confidence: 96
-    },
-    {
-      id: 2,
-      question: "EverBright payment terms",
-      answer: "EverBright Fashions Ltd standard payment terms: LC 90 days from B/L date. Alternative T/T 30% deposit, 70% before shipment for orders >$50K.",
-      sources: [
-        { file: "Contract_EB_2024.pdf", location: "page 5, clause 8.2", type: "PDF" },
-        { file: "Payment_Terms_EB.xlsx", location: "sheet 1", type: "Excel" }
-      ],
-      timestamp: "2024-01-12",
-      confidence: 98
-    },
-    {
-      id: 3,
-      question: "Lab-dip approval status for summer collection",
-      answer: "Summer 2024 collection lab-dip status: 23 approved, 4 pending revision (742, 758, 771, 803), 2 rejected (756, 792).",
-      sources: [
-        { file: "Labdip_Status_SS24.xlsx", location: "summary tab", type: "Excel" },
-        { file: "Email_Labdip_Update.pdf", location: "body", type: "Email" }
-      ],
-      timestamp: "2024-01-10",
-      confidence: 92
-    }
-  ];
+  const { data: searchResults = [], isLoading } = useQuery({
+    queryKey: ['knowledge-search', searchQuery],
+    queryFn: () => fakeApi.searchKnowledge(searchQuery),
+  });
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -85,7 +56,6 @@ const KnowledgeSearch = () => {
             {/* Filters */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-700">Filters:</span>
               </div>
               
@@ -134,56 +104,62 @@ const KnowledgeSearch = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Search Results</h2>
-          <span className="text-sm text-gray-600">{searchResults.length} results found</span>
+          <span className="text-sm text-gray-600">
+            {isLoading ? "Searching..." : `${searchResults.length} results found`}
+          </span>
         </div>
 
-        {searchResults.map((result) => (
-          <Card key={result.id} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                {/* Answer */}
-                <div>
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Answer</h3>
-                  <p className="text-gray-700 leading-relaxed">{result.answer}</p>
-                </div>
-
-                {/* Sources */}
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-3">Sources</h4>
-                  <div className="space-y-2">
-                    {result.sources.map((source, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg">{getTypeIcon(source.type)}</span>
-                          <div>
-                            <p className="font-medium text-sm">{source.file}</p>
-                            <p className="text-xs text-gray-600">{source.location}</p>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          View
-                        </Button>
-                      </div>
-                    ))}
+        {isLoading ? (
+          <div className="text-center py-8">Loading results...</div>
+        ) : (
+          searchResults.map((result) => (
+            <Card key={result.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  {/* Answer */}
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900 mb-2">Answer</h3>
+                    <p className="text-gray-700 leading-relaxed">{result.answer}</p>
                   </div>
-                </div>
 
-                {/* Metadata */}
-                <div className="flex items-center justify-between pt-2 border-t">
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      {result.timestamp}
+                  {/* Sources */}
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Sources</h4>
+                    <div className="space-y-2">
+                      {result.sources.map((source, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg">{getTypeIcon(source.type)}</span>
+                            <div>
+                              <p className="font-medium text-sm">{source.file}</p>
+                              <p className="text-xs text-gray-600">{source.location}</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            View
+                          </Button>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-700">
-                    {result.confidence}% confidence
-                  </Badge>
+
+                  {/* Metadata */}
+                  <div className="flex items-center justify-between pt-2 border-t">
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        {result.timestamp}
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                      {result.confidence}% confidence
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       {/* Quick Searches */}
@@ -193,28 +169,28 @@ const KnowledgeSearch = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("payment terms")}>
               Payment terms by supplier
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("cost sheets")}>
               Latest cost sheets
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("lab-dips")}>
               Pending lab-dips
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("carton specifications")}>
               Carton specifications
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("delays")}>
               Ex-factory delays
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("quality")}>
               Quality certificates
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("shipping")}>
               Shipping documents
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button variant="outline" className="justify-start" onClick={() => setSearchQuery("BOM")}>
               BOM changes
             </Button>
           </div>

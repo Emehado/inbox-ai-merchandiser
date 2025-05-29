@@ -3,95 +3,23 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ChaseUpDrawer } from "@/components/ChaseUpDrawer";
 import { ArrowUpDown, Download, Mail, Clock, CheckCircle, AlertTriangle } from "lucide-react";
-
-interface ChaseUp {
-  id: string;
-  sent: string;
-  supplier: string;
-  email: string;
-  subject: string;
-  reason: string;
-  slaHours: number;
-  status: "awaiting" | "replied" | "overdue";
-  repliedHours?: number;
-  overdueHours?: number;
-  message: string;
-  reply?: string;
-}
-
-const mockChaseUps: ChaseUp[] = [
-  {
-    id: "1",
-    sent: "2025-05-28 07:20",
-    supplier: "EverBright Fashions",
-    email: "alice@everbright-fashions.com",
-    subject: "Carton size needed – PO #3245",
-    reason: "Missing carton L/W/H",
-    slaHours: 48,
-    status: "awaiting",
-    message: "Dear Alice,\n\nWe are missing the carton dimensions for PO #3245. Could you please provide the Length, Width, and Height specifications?\n\nBest regards,\nCentrade AI Bot"
-  },
-  {
-    id: "2",
-    sent: "2025-05-27 16:05",
-    supplier: "KnitWell Ltd",
-    email: "qc@knitwell.com",
-    subject: "Lab-dip approval needed",
-    reason: "Width missing",
-    slaHours: 24,
-    status: "replied",
-    repliedHours: 5,
-    message: "Hello QC Team,\n\nThe fabric width specification is missing from lab-dip #742. Please provide this information for approval.\n\nThank you,\nCentrade AI Bot",
-    reply: "Hi, the fabric width is 58 inches. Please find updated specs attached. - QC Team"
-  },
-  {
-    id: "3",
-    sent: "2025-05-27 09:52",
-    supplier: "Pacific Bags",
-    email: "bob@pacific-bags.cn",
-    subject: "HS code confirmation",
-    reason: "Missing HTS code",
-    slaHours: 24,
-    status: "overdue",
-    overdueHours: 11,
-    message: "Dear Bob,\n\nWe need the HS/HTS code for the shipment. This is required for customs clearance.\n\nPlease provide at your earliest convenience.\n\nRegards,\nCentrade AI Bot"
-  },
-  {
-    id: "4",
-    sent: "2025-05-26 14:30",
-    supplier: "TextilePro Co",
-    email: "orders@textilepro.com",
-    subject: "Color confirmation needed",
-    reason: "Pantone mismatch",
-    slaHours: 72,
-    status: "awaiting",
-    message: "Hello,\n\nThere's a discrepancy in the Pantone color specification. Please confirm the correct color code.\n\nBest,\nCentrade AI Bot"
-  },
-  {
-    id: "5",
-    sent: "2025-05-26 11:15",
-    supplier: "GlobalStitch Ltd",
-    email: "info@globalstitch.com",
-    subject: "Size chart approval",
-    reason: "Size spec missing",
-    slaHours: 48,
-    status: "replied",
-    repliedHours: 2,
-    message: "Dear Team,\n\nThe size chart for style #24-AW-019 is missing specifications for XL and XXL sizes.\n\nKind regards,\nCentrade AI Bot",
-    reply: "Updated size chart attached with XL (42-44) and XXL (46-48) measurements. Thanks!"
-  }
-];
+import { useQuery } from "@tanstack/react-query";
+import { fakeApi } from "../services/fakeApi";
+import { type ChaseUp } from "../data/mockData";
 
 const ChaseUps = () => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [selectedChaseUp, setSelectedChaseUp] = useState<ChaseUp | null>(null);
-  const [sortBy, setSortBy] = useState<string>("");
+
+  const { data: chaseUps = [], isLoading } = useQuery({
+    queryKey: ['chase-ups', selectedTab],
+    queryFn: () => fakeApi.getChaseUps(selectedTab),
+  });
 
   const getStatusBadge = (status: string, repliedHours?: number, overdueHours?: number) => {
     switch (status) {
@@ -106,14 +34,13 @@ const ChaseUps = () => {
     }
   };
 
-  const getFilteredChaseUps = () => {
-    if (selectedTab === "all") return mockChaseUps;
-    return mockChaseUps.filter(item => item.status === selectedTab);
-  };
+  const awaitingCount = chaseUps.filter(item => item.status === "awaiting").length;
+  const overdueCount = chaseUps.filter(item => item.status === "overdue").length;
+  const repliedCount = chaseUps.filter(item => item.status === "replied").length;
 
-  const awaitingCount = mockChaseUps.filter(item => item.status === "awaiting").length;
-  const overdueCount = mockChaseUps.filter(item => item.status === "overdue").length;
-  const repliedCount = mockChaseUps.filter(item => item.status === "replied").length;
+  if (isLoading) {
+    return <div className="p-6">Loading chase-ups...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -189,7 +116,7 @@ const ChaseUps = () => {
               <TabsTrigger value="awaiting">Awaiting ({awaitingCount})</TabsTrigger>
               <TabsTrigger value="replied">Replied ({repliedCount})</TabsTrigger>
               <TabsTrigger value="overdue">Overdue ({overdueCount})</TabsTrigger>
-              <TabsTrigger value="all">All ({mockChaseUps.length})</TabsTrigger>
+              <TabsTrigger value="all">All ({chaseUps.length})</TabsTrigger>
             </TabsList>
             
             <TabsContent value={selectedTab} className="mt-6">
@@ -225,7 +152,7 @@ const ChaseUps = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {getFilteredChaseUps().map((chaseUp) => (
+                  {chaseUps.map((chaseUp) => (
                     <TableRow 
                       key={chaseUp.id} 
                       className="cursor-pointer hover:bg-gray-50"

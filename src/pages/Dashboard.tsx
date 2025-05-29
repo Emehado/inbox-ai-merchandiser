@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -5,8 +6,19 @@ import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Search, AlertTriangle, Inbox, Send, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fakeApi } from "../services/fakeApi";
 
 const Dashboard = () => {
+  const { data: dashboardData, isLoading } = useQuery({
+    queryKey: ['dashboard-summary'],
+    queryFn: fakeApi.getDashboardSummary,
+  });
+
+  if (isLoading) {
+    return <div className="p-6">Loading dashboard...</div>;
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -39,33 +51,28 @@ const Dashboard = () => {
             <AlertTriangle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600 mb-4">2</div>
+            <div className="text-2xl font-bold text-red-600 mb-4">
+              {dashboardData?.urgentExceptions?.length || 0}
+            </div>
             <div className="space-y-3">
-              <Link to="/exception/3245" className="block">
-                <div className="p-3 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium text-sm">PO #3245</p>
-                      <p className="text-xs text-gray-600">EverBright Fashions</p>
+              {dashboardData?.urgentExceptions?.map((exception) => (
+                <Link key={exception.id} to={`/exception/${exception.id}`} className="block">
+                  <div className="p-3 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium text-sm">PO #{exception.poNumber}</p>
+                        <p className="text-xs text-gray-600">{exception.supplier}</p>
+                      </div>
+                      {exception.daysAffected && (
+                        <Badge variant="destructive" className="text-xs">
+                          {exception.daysAffected} days
+                        </Badge>
+                      )}
                     </div>
-                    <Badge variant="destructive" className="text-xs">6 days</Badge>
+                    <p className="text-xs text-red-700 mt-1">{exception.description}</p>
                   </div>
-                  <p className="text-xs text-red-700 mt-1">Ex-factory slipped</p>
-                </div>
-              </Link>
-              
-              <Link to="/labdip/742" className="block">
-                <div className="p-3 bg-orange-50 rounded-lg border border-orange-100 hover:bg-orange-100 transition-colors cursor-pointer">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium text-sm">Lab-dip #742</p>
-                      <p className="text-xs text-gray-600">KnitWell Ltd</p>
-                    </div>
-                    <Badge variant="secondary" className="text-xs bg-orange-100">Missing</Badge>
-                  </div>
-                  <p className="text-xs text-orange-700 mt-1">Fabric width missing</p>
-                </div>
-              </Link>
+                </Link>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -78,26 +85,34 @@ const Dashboard = () => {
               <Inbox className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold mb-4">137</div>
+              <div className="text-2xl font-bold mb-4">
+                {dashboardData?.pipelineStats?.total || 0}
+              </div>
               <div className="text-xs text-gray-500 mb-3">Last 24 hours</div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-sm">PO Updates</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">62</span>
+                    <span className="text-sm font-medium">
+                      {dashboardData?.pipelineStats?.poUpdates || 0}
+                    </span>
                     <Badge variant="outline" className="text-xs">3 review</Badge>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Cost Sheets</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">30</span>
+                    <span className="text-sm font-medium">
+                      {dashboardData?.pipelineStats?.costSheets || 0}
+                    </span>
                     <Badge variant="destructive" className="text-xs">1 error</Badge>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Noise/Other</span>
-                  <span className="text-sm font-medium">27</span>
+                  <span className="text-sm font-medium">
+                    {dashboardData?.pipelineStats?.noise || 0}
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -111,20 +126,32 @@ const Dashboard = () => {
             <Send className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold mb-4">14</div>
+            <div className="text-2xl font-bold mb-4">
+              {dashboardData?.chaseUpStats?.total || 0}
+            </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Replied</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-green-600">6</span>
+                  <span className="text-sm font-medium text-green-600">
+                    {dashboardData?.chaseUpStats?.replied || 0}
+                  </span>
                   <div className="w-16 bg-gray-200 rounded-full h-2">
-                    <div className="bg-green-500 h-2 rounded-full" style={{width: '43%'}}></div>
+                    <div 
+                      className="bg-green-500 h-2 rounded-full" 
+                      style={{
+                        width: `${dashboardData?.chaseUpStats?.total ? 
+                          (dashboardData.chaseUpStats.replied / dashboardData.chaseUpStats.total) * 100 : 0}%`
+                      }}
+                    ></div>
                   </div>
                 </div>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Pending</span>
-                <span className="text-sm font-medium text-orange-600">8</span>
+                <span className="text-sm font-medium text-orange-600">
+                  {dashboardData?.chaseUpStats?.awaiting || 0}
+                </span>
               </div>
             </div>
             <Link to="/chaseups">
@@ -142,7 +169,9 @@ const Dashboard = () => {
             <Clock className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold mb-4">4.2m</div>
+            <div className="text-2xl font-bold mb-4">
+              {dashboardData?.processingTime || "4.2m"}
+            </div>
             <div className="text-xs text-gray-500 mb-3">Avg per message</div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
