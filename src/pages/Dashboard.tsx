@@ -71,36 +71,38 @@ const Dashboard = () => {
         </Card>
 
         {/* Inbox Pipeline */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Inbox Pipeline</CardTitle>
-            <Inbox className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold mb-4">137</div>
-            <div className="text-xs text-gray-500 mb-3">Last 24 hours</div>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm">PO Updates</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">62</span>
-                  <Badge variant="outline" className="text-xs">3 review</Badge>
+        <Link to="/pipeline-insight" className="block">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Inbox Pipeline</CardTitle>
+              <Inbox className="h-4 w-4 text-blue-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold mb-4">137</div>
+              <div className="text-xs text-gray-500 mb-3">Last 24 hours</div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">PO Updates</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">62</span>
+                    <Badge variant="outline" className="text-xs">3 review</Badge>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">Cost Sheets</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">30</span>
+                    <Badge variant="destructive" className="text-xs">1 error</Badge>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm">Noise/Other</span>
+                  <span className="text-sm font-medium">27</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Cost Sheets</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">30</span>
-                  <Badge variant="destructive" className="text-xs">1 error</Badge>
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Noise/Other</span>
-                <span className="text-sm font-medium">27</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Chase-ups */}
         <Card>
