@@ -127,9 +127,11 @@ const Dashboard = () => {
                 <span className="text-sm font-medium text-orange-600">8</span>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="w-full mt-3">
-              Send Follow-ups
-            </Button>
+            <Link to="/chaseups">
+              <Button variant="outline" size="sm" className="w-full mt-3">
+                Send Follow-ups
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
