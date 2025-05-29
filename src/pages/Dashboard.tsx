@@ -43,18 +43,18 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Urgent Exceptions */}
-        <Card className="border-red-200">
+        <Card className="border-red-200 flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-red-600">
               Urgent Exceptions
             </CardTitle>
             <AlertTriangle className="h-4 w-4 text-red-500" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1 flex flex-col">
             <div className="text-2xl font-bold text-red-600 mb-4">
               {dashboardData?.urgentExceptions?.length || 0}
             </div>
-            <div className="space-y-3 mb-4">
+            <div className="space-y-3 flex-1">
               {dashboardData?.urgentExceptions?.slice(0, 2).map((exception) => (
                 <Link key={exception.id} to={`/exception/${exception.id}`} className="block">
                   <div className="p-3 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer">
@@ -79,27 +79,29 @@ const Dashboard = () => {
                 </div>
               )}
             </div>
-            <Link to="/exceptions">
-              <Button variant="outline" size="sm" className="w-full">
-                View All Exceptions
-              </Button>
-            </Link>
+            {(dashboardData?.urgentExceptions?.length || 0) > 0 && (
+              <div className="mt-3 pt-3 border-t border-red-100">
+                <Link to="/exceptions" className="text-xs text-red-600 hover:text-red-800 hover:underline">
+                  View all exceptions →
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
 
         {/* Inbox Pipeline */}
         <Link to="/pipeline-insight" className="block">
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Inbox Pipeline</CardTitle>
               <Inbox className="h-4 w-4 text-blue-500" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1 flex flex-col">
               <div className="text-2xl font-bold mb-4">
                 {dashboardData?.pipelineStats?.total || 0}
               </div>
               <div className="text-xs text-gray-500 mb-3">Last 24 hours</div>
-              <div className="space-y-2">
+              <div className="space-y-2 flex-1">
                 <div className="flex justify-between items-center">
                   <span className="text-sm">PO Updates</span>
                   <div className="flex items-center gap-2">
@@ -130,16 +132,16 @@ const Dashboard = () => {
         </Link>
 
         {/* Chase-ups */}
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Chase-ups Sent</CardTitle>
             <Send className="h-4 w-4 text-green-500" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1 flex flex-col">
             <div className="text-2xl font-bold mb-4">
               {dashboardData?.chaseUpStats?.total || 0}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Replied</span>
                 <div className="flex items-center gap-2">
@@ -173,17 +175,17 @@ const Dashboard = () => {
         </Card>
 
         {/* Processing Time */}
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Processing Time</CardTitle>
             <Clock className="h-4 w-4 text-purple-500" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-1 flex flex-col">
             <div className="text-2xl font-bold mb-4">
               {dashboardData?.processingTime || "4.2m"}
             </div>
             <div className="text-xs text-gray-500 mb-3">Avg per message</div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <div className="flex justify-between items-center">
                 <span className="text-sm">Auto-processed</span>
                 <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
