@@ -11,6 +11,7 @@ import ProcessingQueue from "./pages/ProcessingQueue";
 import KnowledgeSearch from "./pages/KnowledgeSearch";
 import Analytics from "./pages/Analytics";
 import TraceTrace from "./pages/TraceTrace";
+import ExceptionDetail from "./pages/ExceptionDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
                 <Route path="/search" element={<KnowledgeSearch />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/trace" element={<TraceTrace />} />
+                <Route path="/exception/:id" element={<ExceptionDetail />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

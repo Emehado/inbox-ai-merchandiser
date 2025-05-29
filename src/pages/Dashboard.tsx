@@ -1,10 +1,10 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Search, AlertTriangle, Inbox, Send, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   return (
@@ -41,16 +41,18 @@ const Dashboard = () => {
           <CardContent>
             <div className="text-2xl font-bold text-red-600 mb-4">2</div>
             <div className="space-y-3">
-              <div className="p-3 bg-red-50 rounded-lg border border-red-100">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-medium text-sm">PO #3245</p>
-                    <p className="text-xs text-gray-600">EverBright Fashions</p>
+              <Link to="/exception/3245" className="block">
+                <div className="p-3 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium text-sm">PO #3245</p>
+                      <p className="text-xs text-gray-600">EverBright Fashions</p>
+                    </div>
+                    <Badge variant="destructive" className="text-xs">6 days</Badge>
                   </div>
-                  <Badge variant="destructive" className="text-xs">6 days</Badge>
+                  <p className="text-xs text-red-700 mt-1">Ex-factory slipped</p>
                 </div>
-                <p className="text-xs text-red-700 mt-1">Ex-factory slipped</p>
-              </div>
+              </Link>
               
               <div className="p-3 bg-orange-50 rounded-lg border border-orange-100">
                 <div className="flex justify-between items-start">
