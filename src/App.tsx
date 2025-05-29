@@ -12,6 +12,7 @@ import KnowledgeSearch from "./pages/KnowledgeSearch";
 import Analytics from "./pages/Analytics";
 import TraceTrace from "./pages/TraceTrace";
 import ExceptionDetail from "./pages/ExceptionDetail";
+import LabDipDetail from "./pages/LabDipDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/trace" element={<TraceTrace />} />
                 <Route path="/exception/:id" element={<ExceptionDetail />} />
+                <Route path="/labdip/:id" element={<LabDipDetail />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

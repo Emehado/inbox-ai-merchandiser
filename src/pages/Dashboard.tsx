@@ -54,16 +54,18 @@ const Dashboard = () => {
                 </div>
               </Link>
               
-              <div className="p-3 bg-orange-50 rounded-lg border border-orange-100">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-medium text-sm">Lab-dip #742</p>
-                    <p className="text-xs text-gray-600">KnitWell Ltd</p>
+              <Link to="/labdip/742" className="block">
+                <div className="p-3 bg-orange-50 rounded-lg border border-orange-100 hover:bg-orange-100 transition-colors cursor-pointer">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium text-sm">Lab-dip #742</p>
+                      <p className="text-xs text-gray-600">KnitWell Ltd</p>
+                    </div>
+                    <Badge variant="secondary" className="text-xs bg-orange-100">Missing</Badge>
                   </div>
-                  <Badge variant="secondary" className="text-xs bg-orange-100">Missing</Badge>
+                  <p className="text-xs text-orange-700 mt-1">Fabric width missing</p>
                 </div>
-                <p className="text-xs text-orange-700 mt-1">Fabric width missing</p>
-              </div>
+              </Link>
             </div>
           </CardContent>
         </Card>
