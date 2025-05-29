@@ -1,11 +1,9 @@
-
 import { Home, MessageSquare, Search, BarChart3, FileCheck, Mail, Moon, Sun, User, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, SidebarSeparator } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "@/contexts/ThemeContext";
-
 const menuItems = [{
   title: "Today Dashboard",
   url: "/",
@@ -27,13 +25,13 @@ const menuItems = [{
   url: "/trace",
   icon: FileCheck
 }];
-
 export function AppSidebar() {
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme();
-
-  return (
-    <Sidebar className="border-r border-border">
+  const {
+    theme,
+    toggleTheme
+  } = useTheme();
+  return <Sidebar className="border-r border-border">
       <SidebarHeader className="border-b border-border p-6">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
@@ -41,7 +39,7 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-lg text-foreground">Centrade AI</span>
-            <span className="text-xs text-muted-foreground">Smart Trading Platform</span>
+            <span className="text-xs text-muted-foreground">Smart Supply Chains</span>
           </div>
         </div>
       </SidebarHeader>
@@ -53,20 +51,14 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
-              {menuItems.map(item => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton 
-                    asChild 
-                    isActive={location.pathname === item.url}
-                    className="group w-full justify-start px-3 py-2.5 rounded-lg transition-all duration-200 hover:bg-accent data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-sm"
-                  >
+              {menuItems.map(item => <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={location.pathname === item.url} className="group w-full justify-start px-3 py-2.5 rounded-lg transition-all duration-200 hover:bg-accent data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-sm">
                     <Link to={item.url} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4 flex-shrink-0" />
                       <span className="font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                </SidebarMenuItem>)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -103,17 +95,8 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border p-4">
         <div className="space-y-3">
           {/* Theme Toggle */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleTheme}
-            className="w-full justify-start gap-3 px-3 py-2.5 rounded-lg"
-          >
-            {theme === 'light' ? (
-              <Moon className="h-4 w-4" />
-            ) : (
-              <Sun className="h-4 w-4" />
-            )}
+          <Button variant="ghost" size="sm" onClick={toggleTheme} className="w-full justify-start gap-3 px-3 py-2.5 rounded-lg">
+            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             <span className="font-medium">
               {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             </span>
@@ -141,6 +124,5 @@ export function AppSidebar() {
           </div>
         </div>
       </SidebarFooter>
-    </Sidebar>
-  );
+    </Sidebar>;
 }
