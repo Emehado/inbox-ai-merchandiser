@@ -1,3 +1,4 @@
+
 // Centralized mock data store
 export interface ChaseUp {
   id: string;
@@ -20,7 +21,7 @@ export interface Exception {
   poNumber: string;
   styleNumber: string;
   supplier: string;
-  status: "urgent" | "pending";
+  status: "urgent" | "warning" | "pending";
   description: string;
   daysAffected?: number;
   detectedAt: string;
@@ -166,7 +167,7 @@ export const mockExceptions: Exception[] = [
     poNumber: "1024",
     styleNumber: "24-AW-089",
     supplier: "TextilePro Co",
-    status: "pending",
+    status: "warning",
     description: "Lab-dip approval delayed",
     daysAffected: 2,
     detectedAt: "2025-05-27 14:22"
@@ -177,7 +178,7 @@ export const mockExceptions: Exception[] = [
     poNumber: "2156",
     styleNumber: "24-SS-301",
     supplier: "GlobalStitch Ltd",
-    status: "pending",
+    status: "warning",
     description: "Size chart incomplete",
     detectedAt: "2025-05-27 11:15"
   },
@@ -198,7 +199,7 @@ export const mockExceptions: Exception[] = [
     poNumber: "4921",
     styleNumber: "24-SS-476",
     supplier: "EverBright Fashions",
-    status: "pending",
+    status: "warning",
     description: "Color specifications unclear",
     detectedAt: "2025-05-26 09:30"
   }

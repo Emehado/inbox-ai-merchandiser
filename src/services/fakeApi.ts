@@ -77,12 +77,12 @@ export const fakeApi = {
   // Dashboard summary endpoint
   async getDashboardSummary() {
     await delay();
-    const urgentExceptions = mockExceptions.filter(e => e.status === 'urgent');
+    const urgentAndWarningExceptions = mockExceptions.filter(e => e.status === 'urgent' || e.status === 'warning');
     const awaitingChaseUps = mockChaseUps.filter(c => c.status === 'awaiting');
     const repliedChaseUps = mockChaseUps.filter(c => c.status === 'replied');
     
     return {
-      urgentExceptions,
+      urgentAndWarningExceptions,
       chaseUpStats: {
         total: mockChaseUps.length,
         awaiting: awaitingChaseUps.length,
