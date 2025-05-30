@@ -156,7 +156,7 @@ export const mockExceptions: Exception[] = [
     poNumber: "742",
     styleNumber: "24-SS-742",
     supplier: "KnitWell Ltd",
-    status: "urgent",
+    status: "warning",
     description: "Fabric width missing",
     detectedAt: "2025-05-28 06:30"
   },
