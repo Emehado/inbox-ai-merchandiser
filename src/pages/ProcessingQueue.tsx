@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -207,7 +206,7 @@ const ProcessingQueue = () => {
 
       {/* Review Drawer */}
       <Sheet open={isReviewOpen} onOpenChange={setIsReviewOpen}>
-        <SheetContent side="right" className="w-[800px] max-w-[90vw]">
+        <SheetContent side="right" className="w-[50vw] min-w-[600px] max-w-[90vw]">
           <SheetHeader>
             <SheetTitle>Review Item</SheetTitle>
           </SheetHeader>
