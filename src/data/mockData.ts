@@ -20,7 +20,7 @@ export interface Exception {
   poNumber: string;
   styleNumber: string;
   supplier: string;
-  status: "urgent" | "pending";
+  status: "urgent" | "pending" | "warning";
   description: string;
   daysAffected?: number;
   detectedAt: string;

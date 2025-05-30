@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,19 +56,29 @@ const Dashboard = () => {
             <div className="space-y-3 flex-1">
               {dashboardData?.urgentExceptions?.slice(0, 2).map((exception) => (
                 <Link key={exception.id} to={`/exception/${exception.id}`} className="block">
-                  <div className="p-3 bg-red-50 rounded-lg border border-red-100 hover:bg-red-100 transition-colors cursor-pointer">
+                  <div className={`p-3 rounded-lg border transition-colors cursor-pointer ${
+                    exception.status === 'warning' 
+                      ? 'bg-orange-50 border-orange-100 hover:bg-orange-100' 
+                      : 'bg-red-50 border-red-100 hover:bg-red-100'
+                  }`}>
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="font-medium text-sm">PO #{exception.poNumber}</p>
                         <p className="text-xs text-gray-600">{exception.supplier}</p>
                       </div>
-                      {exception.daysAffected && (
+                      {exception.status === 'warning' ? (
+                        <Badge variant="outline" className="text-xs text-orange-600 border-orange-300">
+                          Warning
+                        </Badge>
+                      ) : exception.daysAffected && (
                         <Badge variant="destructive" className="text-xs">
                           {exception.daysAffected} days
                         </Badge>
                       )}
                     </div>
-                    <p className="text-xs text-red-700 mt-1">{exception.description}</p>
+                    <p className={`text-xs mt-1 ${
+                      exception.status === 'warning' ? 'text-orange-700' : 'text-red-700'
+                    }`}>{exception.description}</p>
                   </div>
                 </Link>
               ))}
